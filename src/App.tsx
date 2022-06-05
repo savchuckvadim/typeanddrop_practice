@@ -7,9 +7,7 @@ function App() {
   const initialCardList = order.map((order, index) => (
     { id: index, order: order, text: `Карточка ${order}` }
   ))
-  let style = {
-    backgroundColor: 'black'
-  }
+
 
   interface Card {
     id: number;
