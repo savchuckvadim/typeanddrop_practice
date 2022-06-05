@@ -40,42 +40,55 @@ export class DragbleFunctions {
 }
 
 export class TasksDragbleFunctions {
-    constructor(color, activeColor, list, setList, currentCard, setCurrentElement) {
+    constructor(color, activeColor, list, setCards, currentCard, setCurrentCard, task, setTask) {
         this.color = color
         this.activeColor = activeColor
         this.list = list
-        this.setList = setList
+        this.setCards = setCards
         this.currentCard = currentCard
-        this.setCurrentElement = setCurrentElement
+        this.setCurrentCard = setCurrentCard
+        this.task = task
+        this.setTask = setTask
     }
     dragStartHandler = (e, card, item = null) => {
         console.log('drag ' + card.text) //что схватили
-        this.setCurrentElement(card)
+        this.setCurrentCard(card)
+        this.setTask(item)
     }
     dragLeaveHandler = (e) => {
+        e.target.style.boxShadow = 'none'
         e.target.style.backgroundColor = this.color
     }
     dragEndHandler = (e) => {
+        e.target.style.boxShadow = 'none'
         e.target.style.backgroundColor = this.color
     }
     dragOverHandler = (e) => {
         e.preventDefault()
+        if (e.target.className === 'task') {
+            e.target.style.boxShadow = '0 4px 3px grey'
+        }
+
         e.target.style.backgroundColor = this.activeColor
-        console.log(e.target)
+        
     }
     dropHandler = (e, card, item = null) => {
         e.preventDefault()
-        e.target.style.backgroundColor = this.color
-        this.setList(this.list.map(c => {
+        const currentIndex = this.currentCard.items.indexOf(this.task)
+        this.currentCard.items.splice(currentIndex, 1)
+        const dropIndex = card.items.indexOf(item)
+
+        card.items.splice(dropIndex + 1, 0, this.task)
+        this.setCards(this.list.map(c => {
             if (c.id === card.id) {
-                return { ...c, order: this.currentCard.order }
+                 return card
             }
             if (c.id === this.currentCard.id) {
-                return { ...c, order: card.order }
+                return this.currentCard
             }
             return c
         }))
-        console.log('drop ' + card.text) //куда бросили
+        e.target.style.backgroundColor = this.color
     }
 
 }

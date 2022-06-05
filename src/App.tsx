@@ -33,6 +33,7 @@ function App() {
 
   const [cardList, setCardList] = useState(initialCardList)
   const [currentCard, setCurrentCard] = useState({ id: 0, order: 0, text: '' })
+
   const [editMode, setEditMode] = useState(false)
 
 
@@ -70,7 +71,7 @@ function App() {
           >
             {card.text}
 
-            <Tasks card={card} tasks={card.items} />
+            <Tasks card={card} tasks={card.items} cardList={cardList} setCardList={setCardList} />
 
           </div>
         )}
@@ -87,16 +88,19 @@ const Tasks = (props: any) => {
 
   return (
     <div className='tasks'>
-      {props.tasks.map((task: TaskType) => <Task card={props.card} task={task} />)}
+      {props.tasks.map((task: TaskType) => <Task key={task.id} cardList={props.cardList} setCardList={props.setCardList} card={props.card} task={task} />)}
     </div>
   )
 }
 
 const Task = (props: any) => {
+  const [currentCard, setCurrentCard] = useState(props.card)
+  // const [tasksCardsList, setCards] = useState(props.card.items)
+  const [currentTask, setCurrentTask] = useState(props.task)
 
   const color = 'white'
   const activeColor = 'green'
-  const TaskFunctions = new TasksDragbleFunctions(color, activeColor)
+  const TaskFunctions = new TasksDragbleFunctions(color, activeColor, props.cardList, props.setCardList, currentCard, setCurrentCard, currentTask, setCurrentTask)
   return (
     <div className='task'
       draggable={true}
@@ -106,7 +110,8 @@ const Task = (props: any) => {
       onDragOver={(e) => { TaskFunctions.dragOverHandler(e) }}
       onDrop={(e) => { TaskFunctions.dropHandler(e, props.card, props.task) }}
     >
-      <p className='task__title'>{props.task.title}</p>
+      {/* <p className='task__title'>{props.task.title}</p> */}
+      {props.task.title}
     </div>
   )
 }
