@@ -55,6 +55,7 @@
 
 .task{
   width: 270px;
+  min-height: 100px;
   margin: 10px 0;
   border-radius: 16px;
   background-color: white;

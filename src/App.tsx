@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 
 import './App.css';
-import { DragbleFunctions } from './utils/dragableFunctions';
-
+import { DragbleFunctions, TasksDragbleFunctions } from './utils/dragableFunctions';
 
 
 function App() {
   const color: string = '#626e85';
-  const colorActive : string = 'rgb(102, 94, 79, 0.5)' 
-
+  const colorActive: string = 'rgb(102, 94, 79, 0.5)'
   const initialCardList = [
     {
       id: 0, order: 0, text: `Сделать`,
@@ -35,6 +33,10 @@ function App() {
 
   const [cardList, setCardList] = useState(initialCardList)
   const [currentCard, setCurrentCard] = useState({ id: 0, order: 0, text: '' })
+  const [editMode, setEditMode] = useState(false)
+
+
+
   const CardsFunctions = new DragbleFunctions(color, colorActive, cardList, setCardList, currentCard, setCurrentCard)
 
 
@@ -50,21 +52,25 @@ function App() {
 
   return (
     <div className="App">
+      <button onClick={() => { editMode ? setEditMode(false) : setEditMode(true) }}>
+        {!editMode ? 'Edit Cards' : 'Перестать Редактировать Карточки'}
+      </button>
       <div className='container'>
         {cardList.sort(sortCard).map(card =>
           <div className='card'
 
-            draggable={true}
-            onDragStart={(e) => { CardsFunctions.dragStartHandler(e, card) }} //в тот момент когда мы взяли карточку
-            onDragLeave={(e) => { CardsFunctions.dragLeaveHandler(e) }} //если вышли за пределы другой карточки
-            onDragEnd={(e) => { CardsFunctions.dragEndHandler(e) }} //если мы отпустили перемещение
-            onDragOver={(e) => { CardsFunctions.dragOverHandler(e) }} //если мы находимся над каким-то другим объектом
-            onDrop={(e) => { CardsFunctions.dropHandler(e, card) }} //если мы отпустили карточку и расчитываем, что после этого должно произойти какое-то действие
+            draggable={editMode}
+            style={editMode ? { cursor: 'grab' } : { cursor: 'auto' }}
+            onDragStart={(e) => { editMode && CardsFunctions.dragStartHandler(e, card) }} //в тот момент когда мы взяли карточку
+            onDragLeave={(e) => { editMode && CardsFunctions.dragLeaveHandler(e) }} //если вышли за пределы другой карточки
+            onDragEnd={(e) => { editMode && CardsFunctions.dragEndHandler(e) }} //если мы отпустили перемещение
+            onDragOver={(e) => { editMode && CardsFunctions.dragOverHandler(e) }} //если мы находимся над каким-то другим объектом
+            onDrop={(e) => { editMode && CardsFunctions.dropHandler(e, card) }} //если мы отпустили карточку и расчитываем, что после этого должно произойти какое-то действие
             key={card.order}
           >
             {card.text}
 
-            <Tasks tasks={card.items} />
+            <Tasks card={card} tasks={card.items} />
 
           </div>
         )}
@@ -72,6 +78,7 @@ function App() {
     </div>
   );
 }
+
 const Tasks = (props: any) => {
   interface TaskType {
     id: number;
@@ -80,17 +87,26 @@ const Tasks = (props: any) => {
 
   return (
     <div className='tasks'>
-      {props.tasks.map((task: TaskType) => <Task title={task.title} />)}
+      {props.tasks.map((task: TaskType) => <Task card={props.card} task={task} />)}
     </div>
   )
 }
+
 const Task = (props: any) => {
 
+  const color = 'white'
+  const activeColor = 'green'
+  const TaskFunctions = new TasksDragbleFunctions(color, activeColor)
   return (
     <div className='task'
       draggable={true}
+      onDragStart={(e) => { TaskFunctions.dragStartHandler(e, props.card, props.task) }}
+      onDragLeave={(e) => { TaskFunctions.dragLeaveHandler(e) }}
+      onDragEnd={(e) => { TaskFunctions.dragEndHandler(e) }}
+      onDragOver={(e) => { TaskFunctions.dragOverHandler(e) }}
+      onDrop={(e) => { TaskFunctions.dropHandler(e, props.card, props.task) }}
     >
-      <p className='task__title'>{props.title}</p>
+      <p className='task__title'>{props.task.title}</p>
     </div>
   )
 }
