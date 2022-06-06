@@ -73,21 +73,30 @@ export class TasksDragbleFunctions {
         
     }
     dropHandler = (e, card, item = null) => {
+        
         e.preventDefault()
         const currentIndex = this.currentCard.items.indexOf(this.task)
         this.currentCard.items.splice(currentIndex, 1)
         const dropIndex = card.items.indexOf(item)
 
         card.items.splice(dropIndex + 1, 0, this.task)
-        this.setCards(this.list.map(c => {
+        this.setCards(() => {
+            
+           let result =  this.list.map(c => {
+                
             if (c.id === card.id) {
                  return card
             }
             if (c.id === this.currentCard.id) {
+                
                 return this.currentCard
             }
             return c
-        }))
+        })
+        debugger
+    console.log(this.list)
+    return  result
+    })
         e.target.style.backgroundColor = this.color
     }
 
