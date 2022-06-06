@@ -1,17 +1,8 @@
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-.App {
-  text-align: center;
-  min-height: 100vh;
-  background-color: #282c34;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+.boards{
+  width: 100vw;
+  height: calc(100vh - 90px);
 
+}
 .container{
   padding: 0 40px;
   height: 100%;
