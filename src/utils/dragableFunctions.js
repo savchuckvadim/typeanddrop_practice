@@ -1,30 +1,35 @@
 export class DragbleFunctions {
-    constructor(color, activeColor, list, setList, currentCard, setCurrentElement) {
+    constructor(color, activeColor, list, setList, currentCard, setCurrentElement, currentTask) {
         this.color = color
         this.activeColor = activeColor
         this.list = list
         this.setList = setList
         this.currentCard = currentCard
         this.setCurrentElement = setCurrentElement
+        this.currentTask = currentTask
     }
     dragStartHandler = (e, card) => {
-        console.log('drag ' + card.text) //что схватили
+        //что схватили
         this.setCurrentElement(card)
     }
     dragLeaveHandler = (e) => {
-        e.target.style.backgroundColor = '#626e85'
+        e.target.style.backgroundColor = this.color
     }
     dragEndHandler = (e) => {
-        e.target.style.backgroundColor = '#626e85'
+        e.target.style.backgroundColor = this.color
     }
     dragOverHandler = (e) => {
         e.preventDefault()
-        e.target.style.backgroundColor = 'rgb(102, 94, 79, 0.5)'
-        console.log(e.target)
+        e.target.style.backgroundColor = this.activeColor
+
+    }
+    dragTaskOverHandler = (e) => {
+        e.preventDefault()
+
     }
     dropHandler = (e, card) => {
         e.preventDefault()
-        e.target.style.backgroundColor = '#626e85'
+        e.target.style.backgroundColor = this.color
         this.setList(this.list.map(c => {
             if (c.id === card.id) {
                 return { ...c, order: this.currentCard.order }
@@ -36,32 +41,62 @@ export class DragbleFunctions {
         }))
         console.log('drop ' + card.text) //куда бросили
     }
+    dropTaskHandler = (e, card) => {
+        e.preventDefault()
+
+
+        card.items.push(this.currentTask)
+
+        const currentIndex = this.currentCard.items.indexOf(this.currentTask) //
+        this.currentCard.items.splice(currentIndex, 1)
+
+
+
+        this.setList(() => {
+
+            return this.list.map((c) => {
+
+                if (c.id === card.id) {
+
+                    return card
+                }
+                if (c.id === this.currentCard.id) {
+
+                    return this.currentCard
+                }
+
+                return c
+            })
+
+        })
+    }
 
 }
 
 export class TasksDragbleFunctions {
-    constructor(color, activeColor, list, setCards, currentCard, setCurrentCard, task, setTask) {
-        this.color = color
-        this.activeColor = activeColor
-        this.list = list
-        this.setCards = setCards
+    constructor(cardList, setCardList, currentCard, setCurrentCard, currentTask, setCurrentTask) {
+
+        this.cardList = cardList
+        this.setCardList = setCardList
         this.currentCard = currentCard
         this.setCurrentCard = setCurrentCard
-        this.task = task
-        this.setTask = setTask
+        this.currentTask = currentTask
+        this.setCurrentTask = setCurrentTask
     }
     dragStartHandler = (e, card, item = null) => {
-        console.log('drag ' + card.text) //что схватили
+
+        // card //что схватили
         this.setCurrentCard(card)
-        this.setTask(item)
+        this.setCurrentTask(item)
+
     }
     dragLeaveHandler = (e) => {
         e.target.style.boxShadow = 'none'
-        e.target.style.backgroundColor = this.color
+        e.target.style.opacity = 1
     }
     dragEndHandler = (e) => {
         e.target.style.boxShadow = 'none'
-        e.target.style.backgroundColor = this.color
+        e.target.style.opacity = 1
     }
     dragOverHandler = (e) => {
         e.preventDefault()
@@ -69,35 +104,38 @@ export class TasksDragbleFunctions {
             e.target.style.boxShadow = '0 4px 3px grey'
         }
 
-        e.target.style.backgroundColor = this.activeColor
-        
+        e.target.style.opacity = 0.7
+
     }
     dropHandler = (e, card, item = null) => {
-        
-        e.preventDefault()
-        const currentIndex = this.currentCard.items.indexOf(this.task)
+        e.target.style.opacity = 1
+        e.stopPropagation()
+
+        const currentIndex = this.currentCard.items.indexOf(this.currentTask) //
         this.currentCard.items.splice(currentIndex, 1)
         const dropIndex = card.items.indexOf(item)
 
-        card.items.splice(dropIndex + 1, 0, this.task)
-        this.setCards(() => {
-            
-           let result =  this.list.map(c => {
-                
-            if (c.id === card.id) {
-                 return card
-            }
-            if (c.id === this.currentCard.id) {
-                
-                return this.currentCard
-            }
-            return c
-        })
-        debugger
-    console.log(this.list)
-    return  result
-    })
-        e.target.style.backgroundColor = this.color
+        card.items.splice(dropIndex + 1, 0, this.currentTask)
+
+        this.setCardList(() => (
+
+            this.cardList.map(c => {
+
+                if (c.id === card.id) {
+
+                    return card
+                }
+                if (c.id === this.currentCard.id) {
+
+                    return this.currentCard
+                }
+
+                return c
+            })
+
+
+        ))
+
     }
 
 }
