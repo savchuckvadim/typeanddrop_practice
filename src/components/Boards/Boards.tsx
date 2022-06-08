@@ -8,7 +8,7 @@ import { DragAndDropFunctions } from '../../utils/dragableFunctions';
 function Boards() {
   const color: string = '#626e85';
   const colorActive: string = 'rgb(102, 94, 79, 0.5)'
-  const initialCardList = [
+  const initialCardList: CardsList = [
     {
       id: 0, order: 0, text: `Сделать`,
       items: [{ id: 1, title: 'Сделать Загранпаспорт' }, { id: 2, title: 'Переехать в Барселону' }]
@@ -24,13 +24,23 @@ function Boards() {
 
   ]
 
+  type Task = {
+    type?: string
+    id: number
+    title: string
 
-  interface Card {
-    id: number;
-    order: number;
-    text: string;
-    items: Array<any>;
   }
+
+   type Card = {
+    id: number
+    order: number
+    text: string
+    items: Array<Task>
+  }
+  type CardsList = Array<Card>
+
+
+
 
   const [cardList, setCardList] = useState(initialCardList)
   const [currentCard, setCurrentCard] = useState({ id: 0, order: 0, text: '', items: [{}, {}, {}] })
@@ -69,7 +79,7 @@ function Boards() {
       </div>
     </div>
 
-    
+
   );
 }
 
