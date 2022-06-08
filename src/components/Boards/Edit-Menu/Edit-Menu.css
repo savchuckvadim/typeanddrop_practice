@@ -1,12 +1,14 @@
 .edit__menu{
     /* width: 50px; */
     height: 50px;
-    border: dotted 3px rgb(202, 202, 202);
+    border: solid 1px rgb(202, 202, 202);
+    border-radius: 16px;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
-    right: 2px;
-    top: 15px;
+    background: rgb(132, 251, 63);
+    background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
     cursor: pointer;
+    color: white;
+    font-weight: 900;
 }

@@ -6,7 +6,7 @@ import { DragAndDropFunctions } from '../../utils/dragableFunctions';
 import EditMenu from './Edit-Menu/Edit-Menu';
 
 
-function Boards() {
+function Boards(props: any) {
   const color: string = '#626e85';
   const colorActive: string = 'rgb(102, 94, 79, 0.5)'
   const initialCardList: CardsList = [
@@ -20,7 +20,7 @@ function Boards() {
     },
     {
       id: 2, order: 2, text: `Готово`,
-      items: [{ id: 5, title: 'Пожить на Бали' }, { id: 6, title: 'Открыть Марихуановый Бизнес' }]
+      items: [{ id: 5, title: 'Пожить на Бали' }, { id: 6, title: 'Открыть Собственный Бизнес' }]
     },
 
   ]
@@ -46,7 +46,7 @@ function Boards() {
   const [cardList, setCardList] = useState(initialCardList)
   const [currentCard, setCurrentCard] = useState({ id: 0, order: 0, text: '', items: [{}, {}, {}] })
 
-  const [editMode, setEditMode] = useState(false)
+ 
 
   const [currentTask, setCurrentTask] = useState({ id: 0, title: '' })
 
@@ -66,15 +66,13 @@ function Boards() {
 
   return (
     <div className="boards">
-      <button onClick={() => { editMode ? setEditMode(false) : setEditMode(true) }}>
-        {!editMode ? 'Edit Cards' : 'Перестать Редактировать Карточки'}
-      </button>
-      {editMode && <EditMenu/>}
+     
+      
       <div className='container'>
         {cardList.sort(sortCard).map(card =>
           <Board
             card={card}
-            editMode={editMode}
+            editMode={props.editMode}
             dragAndDrop={dragAndDrop}
           />
         )}

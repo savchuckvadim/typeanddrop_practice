@@ -1,0 +1,36 @@
+.header{
+    height: 70px;
+    /* width: 100vw; */
+    background: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.header__container{
+    width: 90vw;
+    height: 70px;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.edit__button, .edit__button--active{
+    height: 50px;
+    width: 150px;
+    border: solid 1px rgb(202, 202, 202);
+    border-radius: 16px;
+    cursor: pointer;
+
+}
+.edit__button{
+    background: rgb(63,94,251);
+    background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+    color: white;
+}
+.edit__button--active{
+    background: rgb(233, 226, 226);
+    color: black;
+}
