@@ -3,6 +3,7 @@ import './Boards.css';
 import Board from './Board/Board';
 
 import { DragAndDropFunctions } from '../../utils/dragableFunctions';
+import EditMenu from './Edit-Menu/Edit-Menu';
 
 
 function Boards() {
@@ -68,6 +69,7 @@ function Boards() {
       <button onClick={() => { editMode ? setEditMode(false) : setEditMode(true) }}>
         {!editMode ? 'Edit Cards' : 'Перестать Редактировать Карточки'}
       </button>
+      {editMode && <EditMenu/>}
       <div className='container'>
         {cardList.sort(sortCard).map(card =>
           <Board
